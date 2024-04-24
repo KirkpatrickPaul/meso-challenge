@@ -2,7 +2,7 @@ from flask import Flask
 from dash import Dash, dcc, html, Input, Output, State, callback, ctx
 from graph import create_graph
 from table import create_table
-from data import toggle_meso
+from data import toggle_meso, companies
 server = Flask (__name__)
 
 @server.route('/')
@@ -41,15 +41,26 @@ app.layout = html.Div([
   Output('ai-graph', 'figure'),
   Output('ai-table', 'children')],
   [Input('estimate-button', 'n_clicks'),
-  Input('year-dropdown', 'value')],
+  Input('year-dropdown', 'value'),
+  Input('ai-graph', 'restyleData'),
+  State('ai-graph', 'figure')],
   )
-def toggle_estimate(n_clicks, value):
+def update_data(n_clicks, value, restyleData, figure):
   input_id = ctx.triggered[0]["prop_id"].split(".")[0]
-  if input_id == 'estimate-button': 
-    toggle_meso()
   newEstimate = 'conservative' if n_clicks % 2 else 'hopeful'
   year = int(value)
-  return buttonText[newEstimate], create_graph(year), create_table(year)
+  if input_id == 'estimate-button': toggle_meso()
+  graph = figure
+  if input_id == 'ai-graph':
+    # This extracts the index of the company that was clicked
+    idx = restyleData[1][0]
+    graphCompany = figure['data'][idx]
+    print(graphCompany)
+    company = next(c for c in companies if c.name == graphCompany['name'])
+    if 'visible' in graphCompany.keys() and graphCompany['visible'] == 'legendonly': company.hide()
+    else: company.makeVisible()
+  else: graph = create_graph(year)
+  return buttonText[newEstimate], graph, create_table(year)
 
 if __name__ == "__main__":
   app.run_server(debug=True)

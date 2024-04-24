@@ -1,21 +1,21 @@
 from plotly import graph_objects as go
-from data import getYears, getVisibleCompanies
+from data import getYears, companies
 
 def create_graph(limitYears = None):
   fig = go.Figure()
-  visibleCompanies = getVisibleCompanies()
-  years = getYears(visibleCompanies, limitYears)
+  years = getYears(companies, limitYears)
   def getValueForYear(year):
     for p in company.performance:
       if p.date.year == year: 
         return p.value
-  for company in visibleCompanies:
+  for company in companies:
     performanceByYear = list(map(getValueForYear, years))
     
     fig.add_trace(go.Bar(x=years,
                         y=performanceByYear,
                         name=company.name,
-                        marker_color=company.color
+                        marker_color=company.color,
+                        visible=True if company.visible else 'legendonly'
       ))
 
   fig.update_layout(

@@ -5,12 +5,21 @@ class AIData:
     self.name = name
     self.color = color
     self.visible = True
+    self.altPerformance = None
 
   def hide(self):
     self.visible = False
 
   def makeVisible(self):
     self.visible = True
+
+  def setAltPerformance(self, performance):
+    self.altPerformance = performance
+
+  def togglePerformance(self):
+    a = self.performance
+    self.performance = self.altPerformance
+    self.altPerformance = a
 
 class Performance:
   def __init__(self, date, value):
@@ -29,15 +38,14 @@ def createPerformance(years, performanceData):
 
 _years = [*range(2025,2035)]
 
-meso_hopeful = AIData(createPerformance(_years, [2, 3, 5, 6, 8, 11, 14, 15, 17, 20]), 'MesoAI', '#8f50e2')
-meso_conservative = AIData(createPerformance(_years, [2, 3, 4, 5, 6, 9, 11, 12, 13, 14]), 'MesoAI', '#8f50e2')
-meso_conservative.hide()
+meso = AIData(createPerformance(_years, [2, 3, 5, 6, 8, 11, 14, 15, 17, 20]), 'MesoAI', '#8f50e2')
+meso.setAltPerformance(createPerformance(_years, [2, 3, 4, 5, 6, 9, 11, 12, 13, 14]))
 
 copilot = AIData(createPerformance(_years, [8, 8, 9, 10, 10, 11, 9, 9, 8, 9]), 'Github Copilot', '#030330')
 synthesia = AIData(createPerformance(_years, [6, 8, 11, 14, 16, 17, 15, 14, 14, 13]), 'Synthesia', '#bc0055')
 gemini = AIData(createPerformance([*range(2025,2032)], [12, 10, 9, 7, 3, 1, 1]), 'Gemini', '#82700d')
 
-companies = [meso_hopeful, meso_conservative, copilot, synthesia, gemini]
+companies = [meso, copilot, synthesia, gemini]
 
 def getVisibleCompanies():
   return list(filter(lambda c : c.visible, companies))
@@ -53,10 +61,4 @@ def getYears(companies, limit = None):
   return years
 
 def toggle_meso():
-  print('toggle_meso')
-  if meso_hopeful.visible:
-    meso_hopeful.hide()
-    meso_conservative.makeVisible()
-  else:
-    meso_hopeful.makeVisible()
-    meso_conservative.hide()
+  meso.togglePerformance()

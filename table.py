@@ -27,5 +27,4 @@ def create_table(limitYears = None):
       dataCells.append(html.Td('-', style={'text-align': 'center', 'padding': '5px'}))
     dataRows.append(html.Tr(dataCells, style={'background-color': company.color, 'color': 'white', 'border-bottom': '1px solid white'}))
 
-  # return html.Table(dataRows, style={'font': '18px sans-serif', 'border-collapse': 'collapse'})
   return dataRows
