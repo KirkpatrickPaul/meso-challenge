@@ -1,0 +1,49 @@
+body {
+  font: 18px sans-serif;
+}
+
+button {
+  background-color: #8f50e2;
+  margin-top: 10px;
+  padding: 12px 18px;
+  color: white;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px #444444;
+}
+button:hover {
+  background-color: #6a3ba8;
+}
+
+Table {
+  border-collapse: collapse;
+}
+
+Tr {
+  color: white;
+  border-bottom: 1px solid white
+}
+
+Th, Td {
+padding: 5px;
+text-align: center;
+}
+
+Tr > .company-name {
+  text-align: right;
+}
+
+Tr > .year-cells {
+color: black;
+font-weight: 700;
+}
+
+.flex-div {
+  display: flex;
+  justify-content: space-around;
+}
+
+.dropdown {
+  max-width: 20vw;
+}

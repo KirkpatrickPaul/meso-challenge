@@ -12,7 +12,7 @@ def hello_world():
 app = Dash(server=server, routes_pathname_prefix='/dash/')
 table = create_table()
 graph = create_graph()
-tableTitle = html.H2('Predicted Companies Performance Raw Data', style={'font-family': 'sans-serif', 'padding-left': '5px'})
+tableTitle = html.H2('Predicted Companies Performance Raw Data', style={'padding-left': '5px'})
 yearOptions = (
   {'label': '3 Years', 'value': '3'},
   {'label': '6 Years', 'value': '6'},
@@ -23,15 +23,14 @@ buttonText = {'conservative': 'Use Hopeful Estimate', 'hopeful': 'Use Conservati
 app.layout = html.Div([
   dcc.Graph(figure=graph, id='ai-graph'), 
   html.Hr(), 
-  html.Div(style={'display':'flex', 'justify-content': 'space-around'},
+  html.Div(className='flex-div',
     children=[html.Div([
-      html.Label(['Forecast Time:'], htmlFor='year-dropdown', style={'font': '18px sans-serif'}),
-      dcc.Dropdown(options=yearOptions, value='10', id='year-dropdown', style={'max-width': '20vw', 'font': '18px sans-serif'}, clearable = False),
-      html.Button('Use Conservative Estimate', id='estimate-button', n_clicks=0, 
-                  style={':hover':{'backgroundColor': '#6a3ba8'}, 'margin-top': '5px', 'padding': '10px 14px', 'background-color': '#8f50e2', 'color': 'white', 'font': '18px sans-serif semibold', 'border': 'none', 'border-radius': '8px', 'box-shadow': '0 6px 12px #444444'})]),
+      html.Label(['Forecast Time:'], htmlFor='year-dropdown'),
+      dcc.Dropdown(options=yearOptions, value='10', id='year-dropdown', className='dropdown', clearable = False),
+      html.Button('Use Conservative Estimate', id='estimate-button', n_clicks=0)]),
       html.Div([
         tableTitle, 
-        html.Table(children=table, style={'font': '18px sans-serif', 'border-collapse': 'collapse'}, id='ai-table')], 
+        html.Table(children=table, id='ai-table')], 
         style={'max-width': 'fit-content', 'margin-inline': 'auto'})
     ])
   ])
@@ -55,7 +54,6 @@ def update_data(n_clicks, value, restyleData, figure):
     # This extracts the index of the company that was clicked
     idx = restyleData[1][0]
     graphCompany = figure['data'][idx]
-    print(graphCompany)
     company = next(c for c in companies if c.name == graphCompany['name'])
     if 'visible' in graphCompany.keys() and graphCompany['visible'] == 'legendonly': company.hide()
     else: company.makeVisible()
